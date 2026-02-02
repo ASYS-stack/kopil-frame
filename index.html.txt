@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vote for Kapil - Frame Generator</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; background: #f4f4f4; }
+        canvas { max-width: 100%; height: auto; border: 2px solid #005f6b; margin-top: 20px; border-radius: 10px; }
+        .upload-btn { background: #005f6b; color: white; padding: 10px 20px; cursor: pointer; border-radius: 5px; }
+        #downloadBtn { display: none; margin-top: 15px; background: #28a745; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; }
+    </style>
+</head>
+<body>
+
+    <h2>কাপিলের জন্য ফ্রেম তৈরি করুন</h2>
+    <p>আপনার ছবি নির্বাচন করুন এবং ফ্রেমটি ডাউনলোড করুন।</p>
+    
+    <input type="file" id="upload" accept="image/*" class="upload-btn">
+    <br>
+    <canvas id="canvas"></canvas>
+    <br>
+    <a id="downloadBtn">ফ্রেমসহ ছবি ডাউনলোড করুন</a>
+
+    <script>
+        const upload = document.getElementById('upload');
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const frame = new Image();
+        
+        // আপনার ফ্রেমের নাম এখানে দিন
+        frame.src = 'frame.png'; 
+
+        upload.addEventListener('change', (e) => {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const img = new Image();
+                img.onload = () => {
+                    // ক্যানভাস সাইজ সেট করা (১০০০x১০০০ স্ট্যান্ডার্ড)
+                    canvas.width = 1000;
+                    canvas.height = 1000;
+
+                    // ব্যবহারকারীর ছবি আঁকা (মাঝখানে সেট করা)
+                    ctx.drawImage(img, 0, 0, 1000, 1000);
+                    
+                    // ফ্রেমটি ছবির উপরে বসানো
+                    ctx.drawImage(frame, 0, 0, 1000, 1000);
+
+                    // ডাউনলোড বাটন সক্রিয় করা
+                    downloadBtn.href = canvas.toDataURL("image/png");
+                    downloadBtn.download = "vote_for_kapil.png";
+                    downloadBtn.style.display = "inline-block";
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(e.target.files[0]);
+        });
+    </script>
+</body>
+</html>
